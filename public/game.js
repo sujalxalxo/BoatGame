@@ -13,7 +13,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 const boatImg = new Image();
-boatImg.src = "assets/motorboat.png";
+boatImg.src = "Assets/motorboat.png";
 
 let score = 0;
 let highScore = localStorage.getItem("highScore") || 0;
