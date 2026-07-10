@@ -27,19 +27,27 @@ io.on("connection", (socket) => {
         socket.emit("role", "spectator");
     }
 
+    console.log("Players after connect:", players);
+
     socket.on("gameState", (state) => {
         socket.broadcast.emit("gameState", state);
     });
 
     socket.on("disconnect", () => {
 
-        if (players.left === socket.id)
-            players.left = null;
-
-        if (players.right === socket.id)
-            players.right = null;
-
         console.log("Disconnected:", socket.id);
+
+        if (players.left === socket.id) {
+            players.left = null;
+        }
+
+        if (players.right === socket.id) {
+            players.right = null;
+        }
+
+        console.log("Players after disconnect:", players);
+
+        io.emit("players", players);
 
     });
 
