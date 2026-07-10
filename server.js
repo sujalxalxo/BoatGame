@@ -13,21 +13,29 @@ let players = {
     right: null
 };
 
-io.on("connection", (socket) => {
-
-    console.log("Connected:", socket.id);
+function assignPlayer(socket) {
 
     if (!players.left) {
         players.left = socket.id;
         socket.emit("role", "left");
-    } else if (!players.right) {
-        players.right = socket.id;
-        socket.emit("role", "right");
-    } else {
-        socket.emit("role", "spectator");
+        return;
     }
 
-    console.log("Players after connect:", players);
+    if (!players.right) {
+        players.right = socket.id;
+        socket.emit("role", "right");
+        return;
+    }
+
+    socket.emit("role", "full");
+}
+
+io.on("connection", (socket) => {
+console.log("Connected:", socket.id);
+
+assignPlayer(socket);
+
+console.log("Players after connect:", players);
 
     socket.on("gameState", (state) => {
         socket.broadcast.emit("gameState", state);
