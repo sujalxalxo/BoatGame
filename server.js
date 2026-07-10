@@ -14,6 +14,7 @@ let players = {
 };
 
 io.on("connection", (socket) => {
+
     console.log("Connected:", socket.id);
 
     if (!players.left) {
@@ -26,15 +27,26 @@ io.on("connection", (socket) => {
         socket.emit("role", "spectator");
     }
 
-    socket.on("disconnect", () => {
-        if (players.left === socket.id) players.left = null;
-        if (players.right === socket.id) players.right = null;
-        console.log("Disconnected:", socket.id);
+    socket.on("gameState", (state) => {
+        socket.broadcast.emit("gameState", state);
     });
+
+    socket.on("disconnect", () => {
+
+        if (players.left === socket.id)
+            players.left = null;
+
+        if (players.right === socket.id)
+            players.right = null;
+
+        console.log("Disconnected:", socket.id);
+
+    });
+
 });
 
 const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log("Server running on port " + PORT);
 });

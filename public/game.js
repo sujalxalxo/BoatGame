@@ -5,8 +5,18 @@ const socket = io();
 let role = "spectator";
 
 socket.on("role", (assignedRole) => {
+
     role = assignedRole;
     console.log("Role:", role);
+
+    if (role === "left") {
+        alert("You control LEFT");
+    } else if (role === "right") {
+        alert("You control RIGHT");
+    } else {
+        alert("Spectator");
+    }
+
 });
 
 canvas.width = window.innerWidth;
